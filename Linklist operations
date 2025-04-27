@@ -1,0 +1,309 @@
+#include<stdio.h>
+
+typedef struct student{
+    int rno;
+    char name[30];
+    float average;
+    struct student *next;
+
+}student;
+
+student *head;
+
+void create(student *h){
+    int rno;
+    char name[30];
+    float average;
+    
+    fgetc(stdin);
+    printf("Enter RolNo: ");
+    scanf("%d",&rno);
+    
+    printf("Enter Student Name: ");
+    scanf("%s",name);
+    
+    printf("Enter Student Average: ");
+    scanf("%f",&average);
+    
+    if (h==NULL){
+        head = (student*)malloc(sizeof(student));
+        head->rno=rno;
+        strcpy(head->name,name);
+        head->average=average;
+        head->next = NULL;
+        
+    }else{
+        while(h->next!=NULL)
+            h=h->next;
+        h->next = (student*)malloc(sizeof(student)); 
+        h->next->rno=rno;
+        strcpy(h->next->name,name);
+        h->next->average=average;
+        h->next->next = NULL;
+        
+    }
+}
+void display(student *h){
+    
+    int ch;
+    printf("\n%25s","Data Base\n\n");
+    printf("%-5s%-15s%s","R/N","Name","Average");
+    printf("\n------------------------------");
+    if(h!=NULL){
+        while(h!=NULL){
+            printf("\n%-5d%-15s%.2f",h->rno,h->name,h->average);
+            h=h->next;
+        }    
+    }else if(h==NULL)
+        printf("\nThere are No Records in the Database");
+        printf("\n--------------------------");
+
+}
+
+int count(student *h){
+    int cnt=0;
+    while(h!=NULL){
+        cnt++;
+        h=h->next;
+    }
+    return cnt;
+}
+
+void InsrtAtfrstPos(student *h){
+    int rno;
+    char name[30];
+    float average;
+    
+    printf("Enter RolNo: ");
+    scanf("%d",&rno);
+    
+    printf("Enter Student Name: ");
+    scanf("%s",name);
+    
+    printf("Enter Student Average: ");
+    scanf("%f",&average);
+    
+    student *temp;
+    temp = (student*)malloc(sizeof(student));
+    temp->rno=rno;
+    strcpy(temp->name,name);
+    temp->average = average;
+    temp->next = h;
+    head = temp;
+}
+
+void InsrtAtAnyPos(student *h){
+    int rno;
+    char name[30];
+    float average;
+    int pos,i,n=count(h);
+    
+    printf("Enter Position to Insert Record: ");
+    scanf("%d",&pos);
+    
+    if(pos>n+1)
+        printf("Index Out of Bounds!!");
+        
+    else if(pos==n+1){
+        create(h);
+    
+    }else if(pos>0){
+        
+        printf("Enter RolNo: ");
+        scanf("%d",&rno);
+    
+        printf("Enter Student Name: ");
+        scanf("%s",name);
+    
+        printf("Enter Student Average: ");
+        scanf("%f",&average);
+    
+        student *temp;
+        for(i=1;i<pos-1;i++)
+            h=h->next;
+        temp = (student*)malloc(sizeof(student));
+        temp->rno=rno;
+        strcpy(temp->name,name);
+        temp->average=average;
+        temp->next = h->next;
+        h->next = temp;   
+    
+    }
+    
+
+}
+
+void searchByPos(student *h){
+
+    int pos,i,n=count(h);
+    
+    printf("Enter Position to Search: ");
+    scanf("%d",&pos);
+    
+    if(pos>n || n<1)
+        printf("Record Not Found!");
+    else if(pos>0){
+        printf("\n%-5s%-15s%s","R/N","NAME","AVERAGE");
+        printf("\n-----------------------------");
+        for(i=1;i<pos;i++)
+            h=h->next;
+        printf("\n%-5d%-15s%.2f",h->rno,h->name,h->average);  
+          
+    
+    }
+
+}
+void update(student *h){
+    int i,pos,n=count(h);
+    
+    printf("Enter Position to Update: ");
+    scanf("%d",&pos);
+    
+    if(pos>n || pos<1)
+        printf("Record Not Found!!");
+    else if(pos>0) {
+        for(i=1;i<pos;i++)
+            h=h->next;
+        printf("Enter RolNo: ");    
+        scanf("%d",&h->rno);
+        printf("Enter Student Name: ");
+        scanf("%s",h->name);
+        printf("Enter Student Average: ");
+        scanf("%f",&h->average);
+        
+        printf("Record Updated Successfully..!");
+    }   
+
+}
+void delete(student *h){
+    int pos,i,n=count(h);
+    int temp;;
+    printf("Enter Position to Delete: ");
+    scanf("%d",&pos);
+    
+    if(pos>n || pos<1)
+        printf("Record Not Found!");
+    else if(pos>0) {
+        printf("\n%-5s%-15s%s","R/N","NAME","AVERAGE");
+        printf("\n-----------------------------");
+        for(i=1;i<pos;i++)
+            h=h->next;
+        printf("\n%-5d%-15s%.2f",h->rno,h->name,h->average);  
+        printf("\n-----------------------------");  
+        temp = h->next;
+        h->next = h->next->next;
+        free(temp);
+        printf("\nRecord Deleted Successfully!!\n");
+    }else if(pos==1){
+        printf("\n%-5s%-15s%s","R/N","NAME","AVERAGE");
+        printf("\n-----------------------------");
+        if(h!=NULL){
+            printf("\n%-5d%-15s%.2f",h->rno,h->name,h->average);
+            printf("\n-------------------------");
+        }    
+        temp=h;
+        head = h->next;
+        free(temp);
+        printf("\nRecord Deleted Successfully!!");
+    }
+        
+}
+
+int main(){
+    int ch;
+    do{
+        start:
+        printf("\n1.Create Linked list");
+        printf("\n2.Display Linked list");
+        printf("\n3.Total Number of Records");
+        printf("\n4.Insert at First Position");
+        printf("\n5.Insert at Any Position");
+        printf("\n6.Search By Position");
+        printf("\n7.Update by Position");
+        printf("\n8.Delete Records ");
+        printf("\n9.Write Linked List to File");
+        printf("\n10.Read Linked list From File");
+        printf("\n0.Exist");
+        
+        printf("\n\nEnter Your Choice: ");
+        scanf("%d",&ch);
+        system("clear");
+        switch(ch){
+            case 1: 
+                system("clear");
+                create(head);
+            break;
+            case 2: 
+                system("clear");
+                display(head);
+                printf("\npress 1 to continue..");
+                scanf("%d",&ch);
+                
+                if(ch==1)
+                    goto start;
+                    
+            break;
+            case 3:     
+                system("clear");
+                printf("There are %d Records",count(head));
+                printf("\npress 1 to continue...");
+                scanf("%d",&ch);
+                
+                if(ch==1)
+                    goto start;
+            break;
+            case 4: 
+                system("clear");
+                InsrtAtfrstPos(head);
+            break;
+            case 5: 
+                system("clear");
+                InsrtAtAnyPos(head);
+                printf("\npress 1 to continue..");
+                scanf("%d",&ch);
+                
+                if(ch==1)
+                    goto start;
+            break;
+            case 6: 
+                system("clear");
+                searchByPos(head);
+                printf("\n\npress 1 to continue..");
+                scanf("%d",&ch);
+                
+                if(ch==1)
+                    goto start;
+                
+            break;
+            case 7: 
+                system("clear");
+                update(head);
+                printf("\n\npress 1 to Continue..");
+                scanf("%d",&ch);
+                
+                if(ch==1)
+                    goto start;
+            break;
+            case 8: 
+                system("clear");
+                delete(head);
+                printf("\n\npress 1 to continue..");
+                scanf("%d",&ch);
+                
+                if(ch==1)
+                    goto start;
+                    
+                    
+            break;
+            case 9: break;
+            case 10: break;
+            case 0: 
+                printf("\t\tGOODBYE!!");
+            break;
+        
+        }
+    
+    }while(ch!=0);
+    
+
+}
