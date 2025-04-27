@@ -22,6 +22,8 @@ Linked lists are useful for dynamic memory usage and efficient insertions and de
 - **Deletion at a given position**
 - **Traversal (display all nodes)**
 - **Search for an element**
+- **Write linklist to file**
+- **Read link list from file**
 
 ## Technologies Used
 
